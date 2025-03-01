@@ -65,7 +65,7 @@ export function SignUpForm() {
       router.push("/dashboard")
       router.refresh()
     } catch (error) {
-      console.error("Registration Error:", error);
+      // console.error("Registration Error:", error);
       // Check for specific error messages from the server
       const errorMessage = error.response?.data?.message || error.message || "Registration failed. Please try again."
       toast.error(errorMessage)

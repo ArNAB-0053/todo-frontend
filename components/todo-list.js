@@ -9,45 +9,32 @@ import { Icons } from "@/components/icons";
 import { apiService } from "@/lib/api-service";
 import { TodoEditForm } from "@/components/todo-edit-form";
 import { toast } from "sonner";
-import { jwtDecode } from "jwt-decode";
 
-export function TodoList() {
+export function TodoList({ todoKey }) {
   const [editingTodo, setEditingTodo] = useState(null);
+  const [togglingId, setTogglingId] = useState(null); // Track which todo is being toggled
 
-  const getUserId = () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return null;
-      
-      const decoded = jwtDecode(token);
-      return decoded.id;
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      return null;
-    }
-  };
-  
-  const userId = getUserId();
-  // console.log(userId)
-  
-  const { data: todos, error, mutate } = useSWR(
-    userId ? `/api/todos/get/${userId}` : null, 
-    userId ? apiService.getTodos : null
-  );
-  
+  const { data: todos, error, mutate } = useSWR(todoKey, apiService.getTodos);
+
   if (error) {
     toast.error("Failed to load todos");
   }
-  
-  const handleToggleComplete = async (id, completed) => {
+
+  const handleToggleComplete = async (id, completed, title) => {
+    setTogglingId(id); // Set loading state for this todo
     try {
       await apiService.updateTodo(id, { completed: !completed });
-      mutate();
+      mutate(); // Refresh the todo list
+      toast.success(
+        completed ? `${title} marked incomplete` : `${title} completed!`
+      );
     } catch (error) {
       toast.error("Failed to update todo status");
+    } finally {
+      setTogglingId(null); // Clear loading state
     }
   };
-  
+
   const handleDelete = async (id) => {
     try {
       await apiService.deleteTodo(id);
@@ -57,15 +44,15 @@ export function TodoList() {
       toast.error("Failed to delete todo");
     }
   };
-  
+
   const handleEdit = (todo) => {
     setEditingTodo(todo);
   };
-  
+
   const handleCancelEdit = () => {
     setEditingTodo(null);
   };
-  
+
   const handleSaveEdit = async (_id, data) => {
     try {
       await apiService.updateTodo(_id, data);
@@ -76,8 +63,7 @@ export function TodoList() {
       toast.error("Failed to update todo");
     }
   };
-  
-  // Loading state
+
   if (!todos) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -85,8 +71,7 @@ export function TodoList() {
       </div>
     );
   }
-  
-  // Empty state
+
   if (todos.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center">
@@ -94,8 +79,7 @@ export function TodoList() {
       </div>
     );
   }
-  
-  // Render todos
+
   return (
     <div className="space-y-4">
       {todos.map((todo) => (
@@ -106,10 +90,17 @@ export function TodoList() {
             ) : (
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={todo.completed}
-                    onCheckedChange={() => handleToggleComplete(todo._id, todo.completed)}
-                  />
+                  {togglingId === todo._id ? (
+                    <Icons.spinner className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Checkbox
+                      checked={todo.completed}
+                      onCheckedChange={() =>
+                        handleToggleComplete(todo._id, todo.completed, todo.title)
+                      }
+                      disabled={togglingId === todo._id} // Disable while loading
+                    />
+                  )}
                   <span className={todo.completed ? "line-through text-muted-foreground" : ""}>
                     {todo.title}
                   </span>

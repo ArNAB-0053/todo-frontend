@@ -55,7 +55,7 @@ export function LoginForm() {
       router.push("/dashboard");
       router.refresh();
     } catch (error) {
-      console.error("Login Error:", error);
+      // console.error("Login Error:", error);
       toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsSignInLoading(false);

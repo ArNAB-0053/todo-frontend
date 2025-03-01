@@ -1,7 +1,4 @@
-import { TodoList } from "@/components/todo-list";
-import { TodoForm } from "@/components/todo-form";
-import { UserNav } from "@/components/user-nav";
-import Header from "@/components/header";
+import { DashboardClient } from "@/components/dashboard-client";
 
 export const metadata = {
   title: "Dashboard",
@@ -20,8 +17,7 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="space-y-6 mt-20">
-        <TodoForm />
-        <TodoList />
+        <DashboardClient />
       </div>
     </div>
   );

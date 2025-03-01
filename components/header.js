@@ -16,7 +16,7 @@ const Header = ({dashboard = false}) => {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-10 border-b bg-background/95 backdrop-blur ${!dashboard && "px-8 lg:px-10 xl:px-16"}`}>
+    <header className={`sticky top-0 z-10 border-b bg-background/95 backdrop-blur ${!dashboard && "px-8 lg:px-10 xl:px-16"} w-full flex items-center justify-center`}>
       <div className="container flex h-16 items-center justify-between">
         <span className={`${dashboard ? "ml-12 md:ml-0" : "ml-0" }`}>
         <Logo/>

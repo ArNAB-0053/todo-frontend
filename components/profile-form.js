@@ -26,14 +26,14 @@ export function ProfileForm() {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        console.log("No token found in localStorage");
+        // console.log("No token found in localStorage");
         return null;
       }
       const decoded = jwtDecode(token);
-      console.log("Decoded token:", decoded);
+      // console.log("Decoded token:", decoded);
       return decoded.id; // Assuming 'id' is the field in your token
     } catch (error) {
-      console.error("Error decoding token:", error);
+      // console.error("Error decoding token:", error);
       return null;
     }
   };
@@ -47,23 +47,23 @@ export function ProfileForm() {
       if (id) {
         try {
           setIsLoading(true);
-          console.log("Fetching user data for ID:", id);
+          // console.log("Fetching user data for ID:", id);
           const userData = await apiService.getUser(id);
-          console.log("User data from API:", userData);
+          // console.log("User data from API:", userData);
           setFormData({
             name: userData.name || "",
             email: userData.email || "",
             bio: userData.bio || "",
           });
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          // console.error("Error fetching user data:", error);
           toast.error("Failed to load profile data.");
           setFormData({ name: "", email: "", bio: "" }); // Reset on failure
         } finally {
           setIsLoading(false);
         }
       } else {
-        console.log("No userId found in token");
+        // console.log("No userId found in token");
         setFormData({ name: "", email: "", bio: "" });
       }
     };
@@ -88,7 +88,7 @@ export function ProfileForm() {
       toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error("Failed to update profile. Please try again.");
-      console.error("Error updating profile:", error);
+      // console.error("Error updating profile:", error);
     } finally {
       setIsLoading(false);
     }
