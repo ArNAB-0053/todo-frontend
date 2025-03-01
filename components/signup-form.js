@@ -8,17 +8,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/icons"
 import { toast } from "sonner"
+import { apiService } from "@/lib/api-service"
 
 export function SignUpForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        router.push("/dashboard");
-      }
-    }, [router]);
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   async function onSubmit(event) {
     event.preventDefault()
@@ -30,12 +31,26 @@ export function SignUpForm() {
     const password = formData.get("password")
   
     try {
-      // 🔹 Call API Service Instead of fetch()
-      await apiService.register({ name, email, password })
+      // Register the user
+      const registerResponse = await apiService.register({ name, email, password })
       
-      toast.success("Account created successfully! Redirecting...")
+      if (!registerResponse?.message) {
+        throw new Error("Invalid response from server");
+      }
+      
+      toast.success("Account created successfully! Logging in...")
   
-      // Auto login after registration
+      // Now login to get the token
+      const loginResponse = await apiService.login({ email, password })
+      
+      if (!loginResponse?.token) {
+        throw new Error("Login failed after registration");
+      }
+      
+      // Store the token from login response
+      localStorage.setItem("token", loginResponse.token);
+      
+      // Also sign in with next-auth
       const signInResult = await signIn("credentials", {
         email,
         password,
@@ -46,30 +61,22 @@ export function SignUpForm() {
         throw new Error(signInResult.error)
       }
   
+      toast.success(`Welcome, ${loginResponse.user?.name || name || "User"}!`)
       router.push("/dashboard")
       router.refresh()
     } catch (error) {
-      toast.error(error.message || "Something went wrong. Please try again.")
+      console.error("Registration Error:", error);
+      // Check for specific error messages from the server
+      const errorMessage = error.response?.data?.message || error.message || "Registration failed. Please try again."
+      toast.error(errorMessage)
     } finally {
       setIsLoading(false)
     }
   }
   
-
   const handleGoogleSignIn = async () => {
-    setIsLoading(true)
-    try {
-      const result = await signIn("google", { redirect: false })
-      if (result?.error) throw new Error("Failed to sign in with Google")
-      
-      toast.success("Signed in with Google! Redirecting...")
-      router.push("/dashboard")
-    } catch (error) {
-      toast.error(error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+    toast.info("Google Sign-in is unavailable. Please use the standard login method.")
+  };
 
   return (
     <div className="grid gap-6">

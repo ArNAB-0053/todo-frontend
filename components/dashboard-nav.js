@@ -131,9 +131,15 @@ export function DashboardNav() {
         if (item.hasPulse) {
           return (
             <div key={item.title}>
-              <button onClick={() => setIsNotesModalOpen(true)} className="w-full border border-gray-600 rounded-md mt-4">
-                {buttonContent}
-              </button>
+              <Button
+                variant="ghost"
+                onClick={() => setIsNotesModalOpen(true)}
+                className="w-full justify-start relative border border-gray-600 rounded-md mt-4"
+              >
+                {Icon && <Icon className="mr-2 h-4 w-4" />}
+                {item.title}
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-black animate-pulse" />
+              </Button>
               <Dialog open={isNotesModalOpen} onOpenChange={setIsNotesModalOpen}>
                 <DialogContent>
                   <DialogHeader>
@@ -141,10 +147,10 @@ export function DashboardNav() {
                   </DialogHeader>
                   <div className="space-y-2 text-sm text-gray-700">
                     <p>
-                      To keep this assignment simple and deliver it quickly, I’ve implemented this as a basic feature.
+                      To keep this assignment simple and deliver it quickly, I've implemented this as a basic feature.
                     </p>
                     <p>
-                      In the interest of time, I may have overlooked some more robust error handling and security measures that I’d typically include in a production environment.
+                      In the interest of time, I may have overlooked some more robust error handling and security measures that I'd typically include in a production environment.
                     </p>
                   </div>
                 </DialogContent>
@@ -154,7 +160,7 @@ export function DashboardNav() {
           );
         }
 
-        // Regular internal links (Dashboard, Profile)
+        // Dashboard, Profile
         return (
           <div key={item.href}>
             <Link href={item.href}>

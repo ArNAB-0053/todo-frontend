@@ -35,13 +35,13 @@ export function TodoForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full items-center space-x-12">
+    <form onSubmit={handleSubmit} className="flex w-full items-center md:space-x-12 max-md:flex-col max-md:space-y-3">
       <Input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Add a new todo..."
         disabled={isLoading}
-        className="h-[3rem]"
+        className="h-[3rem] "
       />
       <Button type="submit" disabled={isLoading} className="h-[3rem] w-[7rem]">
         {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> : <Icons.plus className="mr-2 h-4 w-4" />}

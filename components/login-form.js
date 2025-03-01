@@ -63,22 +63,7 @@ export function LoginForm() {
   }
 
   const handleGoogleSignIn = async () => {
-    setIsGoogleLoading(true);
-    try {
-      const result = await signIn("google", { redirect: false });
-
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-
-      toast.success("Signed in with Google!");
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Google Sign-In Error:", error);
-      toast.error("Failed to sign in with Google");
-    } finally {
-      setIsGoogleLoading(false);
-    }
+    toast.info("Google Sign-in is unavailable. Please use the standard login method.")
   };
 
   return (
