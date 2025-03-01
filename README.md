@@ -49,17 +49,17 @@ npm install --force
    * The repo includes an .env.example file showing the structure for .env.local.
    * Copy it to .env.local:
    * Edit .env.local and add your backend URL (MongoDB Atlas URI is configured in the backend repo):
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:5000 # Your backend URL
-```
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:5000 # Your backend URL
+   ```
    * Note: See the [Backend GitHub Repo](https://github.com/ArNAB-0053/todo-backend) for MongoDB URI setup.
 
 4. **Run the Frontend:**
    * Ensure the backend is running (refer to backend repo instructions).
    * Start the Next.js app:
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
    * Open http://localhost:3000 in your browser.
 
 You're good to go! If you're testing locally with a different IP (e.g., 192.168.x.x:5000), update NEXT_PUBLIC_API_URL in .env.local accordingly.
