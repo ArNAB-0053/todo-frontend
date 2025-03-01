@@ -21,7 +21,7 @@ This is a simple todo application built with Next.js, designed to help users man
 
 ## Demo
 - **Deployed Link:** [Vercel Deployment](https://todo-plan-act-achieve.vercel.app/)
-- **Video Reference:** [Demo Video](https://video-link)
+- **Video Reference:** [Demo Video](https://streamable.com/kfj3d2)
 
 **Note:** The deployed version uses MongoDB, which may act slowly due to free-tier hosting limitations or network latency. Local testing (e.g., with http://localhost:5000) offers faster performance.
 
