@@ -1,4 +1,4 @@
-# Todo App with Next.js
+# Todo. - Plan, Act, Achieve
 
 ## Introduction
 This is a simple todo application built with Next.js, designed to help users manage their tasks efficiently. It features user authentication and basic CRUD operations for todos, with a responsive UI for desktop and mobile devices. The frontend integrates with a custom backend API (hosted in a separate repository) and uses MongoDB for data storage, showcasing a full-stack development workflow.
