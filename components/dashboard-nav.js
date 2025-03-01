@@ -24,17 +24,26 @@ const navItems = [
     href: "/dashboard/profile",
     icon: "userCircle",
   },
-
   {
     title: "GitHub",
-    href: "https://github.com", 
     icon: "github",
-    external: true,
+    subItems: [
+      {
+        title: "Frontend",
+        href: "https://github.com/ArNAB-0053/todo-frontend", 
+        external: true,
+      },
+      {
+        title: "Backend",
+        href: "https://github.com/ArNAB-0053/todo-backend", 
+        external: true,
+      },
+    ],
   },
   {
     title: "Postscript",
     href: "#",
-    icon: "danzer",
+    icon: "danzer", 
     hasPulse: true,
   },
 ];
@@ -49,28 +58,64 @@ export function DashboardNav() {
         const Icon = Icons[item.icon];
         const isActive = pathname === item.href;
 
+        // Regular button content for items without subItems
         const buttonContent = (
           <Button
-            variant={isActive && !item.external && !item.hasPulse ? "default" : "ghost"}
+            variant={isActive && !item.subItems && !item.hasPulse ? "default" : "ghost"}
             className={cn(
               "w-full justify-start relative",
-              isActive && !item.external && !item.hasPulse && "bg-primary text-primary-foreground"
+              isActive && !item.subItems && !item.hasPulse && "bg-primary text-primary-foreground"
             )}
           >
-            <Icon className="mr-2 h-4 w-4" />
+            {Icon && <Icon className="mr-2 h-4 w-4" />}
             {item.title}
             {item.hasPulse && (
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-black animate-pulse" />
             )}
           </Button>
         );
 
-        // Add separator after "Profile" (index 1)
+        // Separator after "Profile" (index 1)
         const isAfterProfile = index === 1;
         const separator = isAfterProfile ? (
           <div className="my-2 border-t border-gray-300" />
         ) : null;
 
+        // GitHub subItems
+        if (item.subItems) {
+          return (
+            <div key={item.title} className="space-y-1">
+              <div className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-600">
+                <Icon className="mr-2 h-4 w-4" />
+                {item.title}
+              </div>
+              {item.subItems.map((subItem) => {
+                const isSubActive = pathname === subItem.href;
+                return (
+                  <Link
+                    key={subItem.href}
+                    href={subItem.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      variant={isSubActive ? "default" : "ghost"}
+                      className={cn(
+                        "w-full justify-start pl-8 text-sm",
+                        isSubActive && "bg-primary text-primary-foreground"
+                      )}
+                    >
+                      {subItem.title}
+                    </Button>
+                  </Link>
+                );
+              })}
+              {separator}
+            </div>
+          );
+        }
+
+        // External link (none here now, handled in subItems)
         if (item.external) {
           return (
             <div key={item.href}>
@@ -82,10 +127,11 @@ export function DashboardNav() {
           );
         }
 
+        // Postscript with dialog
         if (item.hasPulse) {
           return (
             <div key={item.title}>
-              <button onClick={() => setIsNotesModalOpen(true)} className="w-full border border-black rounded-md"> 
+              <button onClick={() => setIsNotesModalOpen(true)} className="w-full border border-gray-600 rounded-md mt-4">
                 {buttonContent}
               </button>
               <Dialog open={isNotesModalOpen} onOpenChange={setIsNotesModalOpen}>
@@ -108,6 +154,7 @@ export function DashboardNav() {
           );
         }
 
+        // Regular internal links (Dashboard, Profile)
         return (
           <div key={item.href}>
             <Link href={item.href}>
